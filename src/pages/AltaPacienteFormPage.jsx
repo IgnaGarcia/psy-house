@@ -3,8 +3,19 @@ import { useNavigate } from "react-router";
 import { createPaciente } from "../services/PacientesService";
 
 const AltaPacienteFormPage = () => {
+    const { user } = useContext(UserContext) // Para obtener el user en el contexto, agregar el import
     const navigate = useNavigate();
+    const [formState, setFormState] = useState(
+        // TODO: meter los attr del form aca
+    )
+    
+    const onInputChange = ({ target }) => {
+        const { name, value } = target
+        formState[name] = value // Para que esto funcione acordate que la etiqueta input tiene que tener el mismo name que el attr en el form state
+        setFormState({ ...formState, [name]: formState[name] })
+    }
 
+    /*
     const [enteredNombre, setEnteredNombre] = useState('')
     const [enteredApellido, setEnteredApellido] = useState('')
     const [enteredFechaDeNacimiento, setEnteredFechaDeNacimiento] = useState('')
@@ -106,14 +117,14 @@ const AltaPacienteFormPage = () => {
     const consumoSustanciashangeHandler = (event) => {
         setEnteredConsumoSustancias(event.target.value);
     }
-
+    */
     const clickCancelButtonHandler = () => {
         navigate("/pacientes")
     }
 
     const submitHandler = async (event) => {
         event.preventDefault()
-        const pacienteData = {
+        const pacienteData = { //TODO esto despues puede ser simplemente el formState
             'nombre': enteredNombre,
             'apellido': enteredApellido,
             'fecha_nacimiento': new Date(enteredFechaDeNacimiento),
@@ -134,6 +145,7 @@ const AltaPacienteFormPage = () => {
             'riesgo_suicida': enteredRiesgoSuicida,
             'tratamiento_previo': enteredTratamientoPrevio,
             'consumo_sustancias': enteredConsumoSustancias,
+            'usuario_id': user._id // TODO agregar la nueva prop para el id del usuario y cargarla con el id del usuario en el contexto
         }
         console.log(pacienteData)
 
